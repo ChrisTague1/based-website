@@ -1,0 +1,15 @@
+{
+  "name": "based-htmx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run build:tailwind && cargo run",
+    "build:tailwind": "npx tailwindcss -i ./src/input.css -o ./static/output.css"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.3.5"
+  }
+}
