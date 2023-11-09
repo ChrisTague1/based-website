@@ -1,6 +1,7 @@
 #[macro_use] extern crate rocket;
 
 use rocket::{fs::{FileServer, relative}, response::content::RawHtml, form::Form};
+use rand::Rng;
 
 #[get("/")]
 fn index() -> RawHtml<&'static str> {
@@ -14,20 +15,32 @@ struct TodoForm {
 
 #[post("/todo", data = "<todo>")]
 fn create_todo(todo: Form<TodoForm>) -> RawHtml<String> {
-    println!("{:#?}", todo.todo);
-    RawHtml(format!(r#"
-<li class="flex items-center justify-between p-2">
+    let mut rng = rand::thread_rng();
+    let num = rng.gen_range(1..=100);
+    let value = format!("{}{}", "a", num);
+    RawHtml(format!(r##"
+<li id="{}" class="flex items-center justify-between p-2">
     <span class="text-gray-700">{}</span>
-    <button class="text-red-500 hover:text-red-700">
+    <button
+        class="text-red-500 hover:text-red-700"
+        hx-delete="/todo"
+        hx-target="#{}"
+        hx-swap="outerHTML"
+    >
       Delete
     </button>
 </li>
-    "#, todo.todo))
+    "##, value, todo.todo, value))
+}
+
+#[delete("/todo")]
+fn delete_todo() -> RawHtml<&'static str> {
+    RawHtml("")
 }
 
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![index, create_todo])
+        .mount("/", routes![index, create_todo, delete_todo])
         .mount("/", FileServer::from(relative!("./static")))
 }
