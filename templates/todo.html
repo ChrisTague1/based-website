@@ -1,0 +1,11 @@
+<li id="{{ value }}" class="flex items-center justify-between p-2">
+    <span class="text-gray-700">{{ todo }}</span>
+    <button
+        class="text-red-500 hover:text-red-700"
+        hx-delete="/todo"
+        hx-target="#{{ value }}"
+        hx-swap="outerHTML"
+    >
+      Delete
+    </button>
+</li>
