@@ -1,6 +1,6 @@
 #[macro_use] extern crate rocket;
 
-use rocket::{fs::{FileServer, relative}, response::content::RawHtml, form::Form};
+use rocket::{fs::{FileServer, relative}, response::content::RawHtml};
 
 mod todo;
 
@@ -12,6 +12,11 @@ fn index() -> RawHtml<&'static str> {
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![index, create_todo, delete_todo])
+        .mount("/", routes![
+            index,
+            // TODO figure out how to make this cleaner
+            todo::create_todo,
+            todo::delete_todo
+        ])
         .mount("/", FileServer::from(relative!("./static")))
 }

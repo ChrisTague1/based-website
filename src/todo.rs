@@ -1,19 +1,22 @@
 use askama::Template;
+use rocket::form::Form;
 
 #[derive(FromForm)]
-struct TodoForm<'a> {
+pub struct TodoForm<'a> {
     todo: &'a str
 }
 
+// TODO figure out how to keep the inner API's small (make these private?)
+// Might not be possible
 #[derive(Template)]
 #[template(path = "todo.html")]
-struct TodoTemplate<'a> {
+pub struct TodoTemplate<'a> {
     todo: &'a str,
     value: String
 }
 
 #[post("/todo", data = "<todo>")]
-fn create_todo(todo: Form<TodoForm>) -> TodoTemplate {
+pub fn create_todo(todo: Form<TodoForm>) -> TodoTemplate {
     let num = rand::random::<usize>();
     let value = format!("{}{}", "a", num);
 
@@ -26,7 +29,7 @@ fn create_todo(todo: Form<TodoForm>) -> TodoTemplate {
 }
 
 #[delete("/todo")]
-fn delete_todo() -> &'static str {
+pub fn delete_todo() -> &'static str {
     ""
 }
 
