@@ -6,8 +6,6 @@ pub struct TodoForm<'a> {
     todo: &'a str
 }
 
-// TODO figure out how to keep the inner API's small (make these private?)
-// Might not be possible
 #[derive(Template)]
 #[template(path = "todo.html")]
 pub struct TodoTemplate<'a> {
@@ -20,12 +18,10 @@ pub fn create_todo(todo: Form<TodoForm>) -> TodoTemplate {
     let num = rand::random::<usize>();
     let value = format!("{}{}", "a", num);
 
-    let todo_html = TodoTemplate {
+    TodoTemplate {
         value,
         todo: todo.todo
-    };
-
-    todo_html
+    }
 }
 
 #[delete("/todo")]
